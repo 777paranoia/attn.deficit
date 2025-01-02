@@ -21,12 +21,14 @@
             align-items: center;
             height: 100vh;
             background-color: white;
-            font-family: 'GGX88 Book', sans-serif; /* Or your preferred font */
+            font-family: 'GGX88 Book', sans-serif;
+            position: relative; /* Required for positioning the footer */
         }
 
         img {
             max-width: 60%;
             margin-bottom: 40px; /* Space between PNG and glyph links */
+            cursor: pointer; /* Indicates interactivity */
         }
 
         .glyph-links {
@@ -47,14 +49,43 @@
         .nerd-link:hover {
             color: gray; /* Optional hover effect */
         }
+
+        .footer-text {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: black;
+            text-align: center;
+            white-space: nowrap;
+            display: none; /* Hidden by default */
+        }
     </style>
 </head>
 <body>
-    <img src="files/img/index.png">
+    <img src="files/img/index.png" id="hoverImage">
 
     <div class="glyph-links">
         <a href="audio.html" class="nerd-link">&#xF2a2;</a> <!-- Eye Icon -->
         <a href="films.html" class="nerd-link">&#xF441;</a> <!-- Film Icon -->
     </div>
+
+    <div id="footerText" class="footer-text">
+        777paranoia@gmail.com &nbsp;&nbsp;&nbsp; @djspeedsick &nbsp;&nbsp;&nbsp; chicago, il
+    </div>
+
+    <script>
+        const hoverImage = document.getElementById('hoverImage');
+        const footerText = document.getElementById('footerText');
+
+        hoverImage.addEventListener('mouseenter', () => {
+            footerText.style.display = 'block';
+        });
+
+        hoverImage.addEventListener('mouseleave', () => {
+            footerText.style.display = 'none';
+        });
+    </script>
 </body>
 </html>
