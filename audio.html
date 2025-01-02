@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>audio</title>
+
+    <style>
+
+
+    .back-to-index {
+        position: absolute;
+        top: 10px;
+        left: 10px; /* Changed to the upper-left corner */
+        font-family: 'SymbolsNerdFont', sans-serif;
+        font-size: 24px; /* Adjust size if needed */
+        text-decoration: none;
+        color: black; /* Default color */
+    }
+
+    .back-to-index:hover {
+        color: gray; /* Optional hover effect */
+    }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: white;
+            font-family: 'GGX88 Book', sans-serif; 
+        }
+
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            width: 80%;
+            height: 90%;
+            margin-top: 100px;
+            box-sizing: border-box;
+        }
+
+        #dropdown {
+            width: 30%;
+            text-align: right;
+        }
+
+        #dropdown button {
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            background: none;
+            color: black;
+            margin-bottom: 8px;
+            border: none;
+        }
+
+        #dropdown button:hover {
+            background: white;
+        }
+
+        #playlist {
+            display: none;
+            width: 100%;
+            padding: 30px;
+            background: white;
+        }
+
+        #playlist button {
+            width: 100%;
+            padding: 6px;
+            margin: 4px 0;
+            background: none;
+            border: none;
+            color: black;
+            text-align: right;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #audioPlayer {
+            display: none;
+        }
+
+        #visualizerBox {
+            width: 30%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<a href="index.html" class="back-to-index"><</a>
+
+
+<div id="container">
+    <div id="dropdown">
+        <button id="togglePlaylist">open me</button>
+        <div id="playlist">
+            <button data-src="files/aud/a_cut_001.mp3">a_cut_001 // 2024 // commercial // 4:10</button>
+            <button data-src="files/aud/a_cut_002.mp3">a_cut_002 // 2024 // commercial // 3:12</button>
+            <button data-src="files/aud/a_cut_003.mp3">a_cut_003 // 2024 // commercial // 2:45</button>
+            <button data-src="files/aud/a_cut_004.mp3">a_cut_004 // 2024 // commercial // 3:50</button>
+            <button data-src="files/aud/cl_sample_001.mp3">cl_sample_001 // 2024 // commercial // 1:30</button>
+            <button data-src="files/aud/m-audio-001.mp3">m-audio-001 // 2024 // commercial // 3:15</button>
+            <button data-src="files/aud/m-audio-002.mp3">m-audio-002 // 2024 // commercial // 3:40</button>
+            <button data-src="files/aud/m-audio-003.mp3">m-audio-003 // 2024 // commercial // 2:50</button>
+            <button data-src="files/aud/m-audio-004.mp3">m-audio-004 // 2024 // commercial // 4:05</button>
+            <button data-src="files/aud/m-audio-005.mp3">m-audio-005 // 2024 // commercial // 2:55</button>
+            <button data-src="files/aud/m-audio-006.mp3">m-audio-006 // 2024 // commercial // 3:20</button>
+            <button data-src="files/aud/r&r_001.mp3">r&r_001 // 2024 // non-commercial // 3:35</button>
+            <button data-src="files/aud/r&r_002.mp3">r&r_002 // 2024 // non-commercial // 4:20</button>
+            <button data-src="files/aud/r&r_003.mp3">r&r_003 // 2024 // non-commercial // 3:00</button>
+            <button data-src="files/aud/misc_unreleased_full_001.mp3">misc_unreleased_full_001 // 2024 // non-commercial // 5:00</button>
+            <button data-src="files/aud/misc_unreleased_full_002.mp3">misc_unreleased_full_002 // 2024 // non-commercial // 4:30</button>
+            <button data-src="files/aud/misc_unreleased_full_003.mp3">misc_unreleased_full_003 // 2024 // non-commercial // 3:45</button>
+            <button data-src="files/aud/misc_unreleased_full_004.mp3">misc_unreleased_full_004 // 2024 // non-commercial // 2:15</button>
+            <button data-src="files/aud/misc_unreleased_full_005.mp3">misc_unreleased_full_005 // 2024 // non-commercial // 3:10</button>
+
+            <audio id="audioPlayer" controls></audio>
+        </div>
+    </div>
+
+    <div id="visualizerBox">
+        <canvas id="canvas"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript" src="lodash.js"></script>
+<script type="text/javascript" src="butterchurn.js"></script>
+<script type="text/javascript" src="butterchurnPresets.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('canvas');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playlist = document.getElementById('playlist');
+    const playlistButtons = document.querySelectorAll('#playlist button');
+    const togglePlaylistButton = document.getElementById('togglePlaylist');
+
+    let audioContext = null;
+    let visualizer = null;
+    let presets = null;
+    let presetKeys = null;
+
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+
+    function initVisualizer() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            visualizer = butterchurn.createVisualizer(audioContext, canvas, {
+                width: canvas.width,
+                height: canvas.height,
+                pixelRatio: window.devicePixelRatio || 1,
+                textureRatio: 1,
+            });
+
+            presets = butterchurnPresets.getPresets();
+            presetKeys = Object.keys(presets);
+
+            function startRenderer() {
+                requestAnimationFrame(startRenderer);
+                visualizer.render();
+            }
+            startRenderer();
+
+            const mediaStream = audioPlayer.captureStream
+                ? audioPlayer.captureStream()
+                : audioPlayer.mozCaptureStream();
+
+            if (mediaStream) {
+                const source = audioContext.createMediaStreamSource(mediaStream);
+                visualizer.connectAudio(source);
+            }
+        }
+    }
+
+    togglePlaylistButton.addEventListener('click', () => {
+        playlist.style.display = 'block';
+        togglePlaylistButton.textContent = 'click track to sample audio';
+
+        if (!audioContext) {
+            initVisualizer();
+        }
+
+        togglePlaylistButton.onclick = () => {
+            const isHidden = playlist.style.display === 'none';
+            playlist.style.display = isHidden ? 'block' : 'none';
+            togglePlaylistButton.textContent = isHidden ? 'click to play' : 'open me audio';
+        };
+    });
+
+    playlistButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            audioPlayer.src = button.dataset.src;
+            audioPlayer.play();
+            if (presetKeys) {
+                const randomPreset = presets[presetKeys[Math.floor(Math.random() * presetKeys.length)]];
+                visualizer.loadPreset(randomPreset, 0);
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
