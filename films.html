@@ -6,26 +6,53 @@
     <title>FILMS</title>
 
     <style>
- @font-face {
-        font-family: 'SymbolsNerdFont';
-        src: url('files/font/SymbolsNerdFont-Regular.woff2') format('woff2'),
-             url('files/font/SymbolsNerdFont-Regular.woff') format('woff');
-        font-display: swap;
-    }
+        @font-face {
+            font-family: 'SymbolsNerdFont';
+            src: url('files/font/SymbolsNerdFont-Regular.woff2') format('woff2'),
+                 url('files/font/SymbolsNerdFont-Regular.woff') format('woff');
+            font-display: swap;
+        }
 
-    .back-to-index {
-        position: absolute;
-        top: 10px;
-        left: 10px; /* Changed to the upper-left corner */
-        font-family: 'SymbolsNerdFont', sans-serif;
-        font-size: 24px; /* Adjust size if needed */
-        text-decoration: none;
-        color: black; /* Default color */
-    }
+        .back-to-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-family: 'SymbolsNerdFont', sans-serif;
+            font-size: 12px;
+            text-decoration: none;
+            color: black;
+        }
 
-    .back-to-index:hover {
-        color: gray; /* Optional hover effect */
-    }
+        .back-to-index:hover {
+            color: gray;
+        }
+
+.help-icon {
+    position: absolute;
+    top: 30px; /* Position below the back button */
+    left: 10px;
+    font-family: 'SymbolsNerdFont', sans-serif;
+    font-size: 12px; /* Same size as the back button */
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+    user-select: none; /* Prevent text selection */
+}
+
+.help-icon:hover {
+    color: gray; /* Optional hover color */
+}
+
+#help-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    color: black; /* Black text for the tooltip */
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 5px;
+    display: none;
+}
 
         body {
             font-family: 'GGX88 Book', sans-serif;
@@ -39,11 +66,10 @@
         }
 
         video {
-            width: 180px;
-            height: 180px;
+            position: absolute;
             object-fit: cover;
             cursor: grab;
-            position: absolute;
+            transition: all 0.2s ease-in-out;
         }
 
         .dragging {
@@ -55,17 +81,43 @@
             pointer-events: none;
             z-index: 1000;
             color: white;
-            font-size: 14px;
+            font-size: 18px;
             white-space: nowrap;
             padding: 0;
             display: none;
         }
     </style>
 </head>
-
 <body>
 
-<a href="index.html" class="back-to-index"><</a>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const helpIcon = document.getElementById('help-icon');
+        const helpTooltip = document.getElementById('help-tooltip');
+
+        helpIcon.addEventListener('mouseenter', () => {
+            helpTooltip.innerHTML = "click + drag videos/hover for audio + info"; // Replace with your actual text
+            helpTooltip.style.display = 'block';
+        });
+
+        helpIcon.addEventListener('mousemove', (event) => {
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+            const padding = 10;
+
+            helpTooltip.style.left = `${cursorX + padding}px`;
+            helpTooltip.style.top = `${cursorY + padding}px`;
+        });
+
+        helpIcon.addEventListener('mouseleave', () => {
+            helpTooltip.style.display = 'none';
+        });
+    });
+</script>
+
+   <a href="index.html" class="back-to-index"><</a>
+<div id="help-icon" class="help-icon">?</div>
+<div id="help-tooltip" class="custom-cursor"></div>
 
     <video id="video1" autoplay muted loop>
         <source src="files/mov/acne1.mp4" type="video/mp4">
@@ -99,94 +151,111 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const videos = document.querySelectorAll('video');
-            const customCursor = document.getElementById('custom-cursor');
-            const gridColumns = 3;
-            const gridGap = 20;
-            const videoSize = 180;
+    const videos = document.querySelectorAll('video');
+    const customCursor = document.getElementById('custom-cursor');
+    const gridColumns = 3;
 
-            const videoDetails = {
-                video1: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video2: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video3: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video4: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video5: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video6: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video7: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-                video8: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-                video9: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025"
-            };
+    function updateGrid() {
+        const videoSize = Math.min(window.innerWidth, window.innerHeight) / 6;
+        const gridGap = videoSize * 0.1;
+        const gridWidth = gridColumns * videoSize + (gridColumns - 1) * gridGap;
+        const gridRows = Math.ceil(videos.length / gridColumns);
+        const gridHeight = gridRows * videoSize + (gridRows - 1) * gridGap;
+        const startX = (window.innerWidth - gridWidth) / 2;
+        const startY = (window.innerHeight - gridHeight) / 2;
 
-            const gridWidth = gridColumns * videoSize + (gridColumns - 1) * gridGap;
-            const gridRows = Math.ceil(videos.length / gridColumns);
-            const gridHeight = gridRows * videoSize + (gridRows - 1) * gridGap;
-            const startX = (window.innerWidth - gridWidth) / 2;
-            const startY = (window.innerHeight - gridHeight) / 2;
+        videos.forEach((video, index) => {
+            const row = Math.floor(index / gridColumns);
+            const col = index % gridColumns;
 
-            videos.forEach((video, index) => {
-                const row = Math.floor(index / gridColumns);
-                const col = index % gridColumns;
-
-                video.style.left = `${startX + col * (videoSize + gridGap)}px`;
-                video.style.top = `${startY + row * (videoSize + gridGap)}px`;
-
-                let isDragging = false;
-                let offsetX, offsetY;
-
-                video.addEventListener('mousedown', (event) => {
-                    isDragging = true;
-                    offsetX = event.clientX - video.getBoundingClientRect().left;
-                    offsetY = event.clientY - video.getBoundingClientRect().top;
-                    video.classList.add('dragging');
-                });
-
-                document.addEventListener('mousemove', (event) => {
-                    if (isDragging) {
-                        video.style.left = `${event.clientX - offsetX}px`;
-                        video.style.top = `${event.clientY - offsetY}px`;
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    if (isDragging) {
-                        isDragging = false;
-                        video.classList.remove('dragging');
-                    }
-                });
-
-                video.addEventListener('mouseenter', () => {
-                    customCursor.innerHTML = videoDetails[video.id];
-                    customCursor.style.display = 'block';
-                    video.muted = false;
-                    video.play().catch(() => {});
-                });
-
-                video.addEventListener('mousemove', (event) => {
-                    const cursorX = event.clientX;
-                    const cursorY = event.clientY;
-                    const padding = 10;
-
-                    if (col === 0) {
-                        customCursor.style.textAlign = "right";
-                        customCursor.style.left = `${cursorX - customCursor.offsetWidth - padding}px`;
-                        customCursor.style.top = `${cursorY + padding}px`;
-                    } else if (col === 1) {
-                        customCursor.style.textAlign = "center";
-                        customCursor.style.left = `${cursorX - customCursor.offsetWidth / 2}px`;
-                        customCursor.style.top = `${cursorY + padding}px`;
-                    } else {
-                        customCursor.style.textAlign = "left";
-                        customCursor.style.left = `${cursorX + padding}px`;
-                        customCursor.style.top = `${cursorY + padding}px`;
-                    }
-                });
-
-                video.addEventListener('mouseleave', () => {
-                    customCursor.style.display = 'none';
-                    video.muted = true;
-                });
-            });
+            video.style.width = `${videoSize}px`;
+            video.style.height = `${videoSize}px`;
+            video.style.left = `${startX + col * (videoSize + gridGap)}px`;
+            video.style.top = `${startY + row * (videoSize + gridGap)}px`;
         });
+    }
+
+    // Initial grid setup
+    updateGrid();
+
+    // Update grid on window resize
+    window.addEventListener('resize', updateGrid);
+
+    const videoDetails = {
+        video1: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video2: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video3: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video4: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video5: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video6: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video7: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video8: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
+        video9: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025"
+    };
+
+    videos.forEach((video, index) => {
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        video.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            offsetX = event.clientX - video.getBoundingClientRect().left;
+            offsetY = event.clientY - video.getBoundingClientRect().top;
+            video.classList.add('dragging');
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (isDragging) {
+                video.style.left = `${event.clientX - offsetX}px`;
+                video.style.top = `${event.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                video.classList.remove('dragging');
+            }
+        });
+
+        // Hover functionality for custom cursor
+        const col = index % gridColumns;
+
+        video.addEventListener('mouseenter', () => {
+            customCursor.innerHTML = videoDetails[video.id];
+            customCursor.style.display = 'block';
+            video.muted = false;
+            video.play().catch(() => {});
+        });
+
+        video.addEventListener('mousemove', (event) => {
+            if (!isDragging) {
+                const cursorX = event.clientX;
+                const cursorY = event.clientY;
+                const padding = 10;
+
+                if (col === 0) { // Leftmost column
+                    customCursor.style.textAlign = "right";
+                    customCursor.style.left = `${cursorX - customCursor.offsetWidth - padding}px`;
+                    customCursor.style.top = `${cursorY + padding}px`;
+                } else if (col === 1) { // Middle column
+                    customCursor.style.textAlign = "center";
+                    customCursor.style.left = `${cursorX - customCursor.offsetWidth / 2}px`;
+                    customCursor.style.top = `${cursorY + padding}px`;
+                } else { // Rightmost column
+                    customCursor.style.textAlign = "left";
+                    customCursor.style.left = `${cursorX + padding}px`;
+                    customCursor.style.top = `${cursorY + padding}px`;
+                }
+            }
+        });
+
+        video.addEventListener('mouseleave', () => {
+            customCursor.style.display = 'none';
+            video.muted = true;
+        });
+    });
+});
     </script>
 </body>
 </html>

@@ -13,7 +13,7 @@
         top: 10px;
         left: 10px; /* Changed to the upper-left corner */
         font-family: 'SymbolsNerdFont', sans-serif;
-        font-size: 24px; /* Adjust size if needed */
+        font-size: 12px; /* Adjust size if needed */
         text-decoration: none;
         color: black; /* Default color */
     }
@@ -33,6 +33,34 @@
             font-family: 'GGX88 Book', sans-serif; 
         }
 
+.help-icon {
+    position: absolute;
+    top: 30px; /* Position below the back button */
+    left: 10px;
+    font-family: 'SymbolsNerdFont', sans-serif;
+    font-size: 12px; /* Same size as the back button */
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+    user-select: none; /* Prevent text selection */
+}
+
+.help-icon:hover {
+    color: gray; /* Optional hover effect */
+}
+
+.custom-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    color: black; /* Black text for the tooltip */
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 5px 10px;
+    display: none;
+}
+
+
         #container {
             display: flex;
             justify-content: center;
@@ -51,7 +79,7 @@
 
         #dropdown button {
             padding: 8px 16px;
-            font-size: 12px;
+            font-size: 1vh;
             cursor: pointer;
             background: none;
             color: black;
@@ -61,17 +89,16 @@
 
         #dropdown button:hover {
             background: white;
-        }
-
+        }  
         #playlist {
             display: none;
-            width: 100%;
-            padding: 30px;
-            background: white;
-        }
-
+            width: 100%; /* Adjusts dynamically to fit the container */
+           
+}
         #playlist button {
             width: 100%;
+            height: 90%;
+
             padding: 6px;
             margin: 4px 0;
             background: none;
@@ -79,7 +106,7 @@
             color: black;
             text-align: right;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 1vh;
         }
 
         #audioPlayer {
@@ -88,7 +115,7 @@
 
         #visualizerBox {
             width: 30%;
-            height: 90%;
+            height: 80%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -102,6 +129,33 @@
 </head>
 <body>
 <a href="index.html" class="back-to-index"><</a>
+<div id="help-icon" class="help-icon">?</div>
+<div id="help-tooltip" class="custom-tooltip"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const helpIcon = document.getElementById('help-icon');
+    const helpTooltip = document.getElementById('help-tooltip');
+
+    helpIcon.addEventListener('mouseenter', () => {
+        helpTooltip.innerHTML = "open folder/click text for audio"; 
+        helpTooltip.style.display = 'block';
+    });
+
+    helpIcon.addEventListener('mousemove', (event) => {
+        const cursorX = event.clientX;
+        const cursorY = event.clientY;
+        const padding = 10;
+
+        helpTooltip.style.left = `${cursorX + padding}px`;
+        helpTooltip.style.top = `${cursorY + padding}px`;
+    });
+
+    helpIcon.addEventListener('mouseleave', () => {
+        helpTooltip.style.display = 'none';
+    });
+});
+</script>
 
 
 <div id="container">
@@ -189,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     togglePlaylistButton.addEventListener('click', () => {
         playlist.style.display = 'block';
-        togglePlaylistButton.textContent = 'click track to sample audio';
+        togglePlaylistButton.textContent = '';
 
         if (!audioContext) {
             initVisualizer();
@@ -211,6 +265,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 visualizer.loadPreset(randomPreset, 0);
             }
         });
+    });
+
+    // Pause audio when clicking outside of buttons
+    document.addEventListener('click', (event) => {
+        const isButton = event.target.closest('button');
+        if (!isButton) {
+            audioPlayer.pause();
+        }
     });
 });
 </script>
