@@ -22,45 +22,32 @@
             height: 100vh;
             background-color: white;
             font-family: 'GGX88 Book', sans-serif;
+            position: relative; /* Required for positioning the footer */
         }
 
         img {
             max-width: 60%;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .content-wrapper {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .click-text {
-            position: absolute;
-            top: 80%; /* Adjust to position it below the PNG */
-            font-size: 7px;
-            color: black;
-            display: none;
-            pointer-events: none; /* Prevent interaction */
+            margin-bottom: 40px; /* Space between PNG and glyph links */
+            cursor: pointer; /* Indicates interactivity */
         }
 
         .glyph-links {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            justify-content: space-between; /* Space out links evenly */
+            align-items: center;
+            width: 50%; /* Adjust width as needed for layout */
+            max-width: 200px; /* Optional: limit max width */
         }
 
         .nerd-link {
             font-family: 'SymbolsNerdFont', sans-serif;
-            font-size: 48px;
-            color: black;
+            font-size: 48px; /* Adjust size as needed */
+            color: black; /* Adjust color */
             text-decoration: none;
         }
 
         .nerd-link:hover {
-            color: gray;
+            color: gray; /* Optional hover effect */
         }
 
         .footer-text {
@@ -72,18 +59,16 @@
             color: black;
             text-align: center;
             white-space: nowrap;
-            display: none;
+            display: none; /* Hidden by default */
         }
     </style>
 </head>
 <body>
-    <div class="content-wrapper">
-        <img src="files/img/index.png" id="hoverImage">
-        <div class="click-text" id="clickText">click these</div>
-        <div class="glyph-links">
-            <a href="audio.html" class="nerd-link">&#xF2a2;</a>
-            <a href="films.html" class="nerd-link">&#xF441;</a>
-        </div>
+    <img src="files/img/index.png" id="hoverImage">
+
+    <div class="glyph-links">
+        <a href="audio.html" class="nerd-link">&#xF2a2;</a> <!-- Eye Icon -->
+        <a href="films.html" class="nerd-link">&#xF441;</a> <!-- Film Icon -->
     </div>
 
     <div id="footerText" class="footer-text">
@@ -93,16 +78,13 @@
     <script>
         const hoverImage = document.getElementById('hoverImage');
         const footerText = document.getElementById('footerText');
-        const clickText = document.getElementById('clickText');
 
         hoverImage.addEventListener('mouseenter', () => {
             footerText.style.display = 'block';
-            clickText.style.display = 'block';
         });
 
         hoverImage.addEventListener('mouseleave', () => {
             footerText.style.display = 'none';
-            clickText.style.display = 'none';
         });
     </script>
 </body>
