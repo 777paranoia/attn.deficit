@@ -22,21 +22,24 @@
             height: 100vh;
             background-color: white;
             font-family: 'GGX88 Book', sans-serif;
-            position: relative;
         }
 
         img {
             max-width: 60%;
-            margin-bottom: 40px;
             cursor: pointer;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Space between elements */
         }
 
         .glyph-links {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 50%;
-            max-width: 200px;
+            justify-content: center;
+            gap: 20px; /* Space between glyph links */
         }
 
         .nerd-link {
@@ -62,25 +65,23 @@
             display: none;
         }
 
-    .click-text {
-    position: absolute;
-    top: calc(50% + 50px); /* Adjusted to move it further down */
-    font-size: 7px;
-    color: black;
-    display: none;
-    pointer-events: none; /* Ensure it's not interactive */
-}
-
+        .click-text {
+            font-size: 7px;
+            color: black;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <img src="files/img/index.png" id="hoverImage">
+    <div class="content-wrapper">
+        <img src="files/img/index.png" id="hoverImage">
 
-    <div class="click-text" id="clickText">click these</div>
+        <div class="click-text" id="clickText">click these</div>
 
-    <div class="glyph-links">
-        <a href="audio.html" class="nerd-link">&#xF2a2;</a>
-        <a href="films.html" class="nerd-link">&#xF441;</a>
+        <div class="glyph-links">
+            <a href="audio.html" class="nerd-link">&#xF2a2;</a>
+            <a href="films.html" class="nerd-link">&#xF441;</a>
+        </div>
     </div>
 
     <div id="footerText" class="footer-text">
