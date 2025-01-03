@@ -22,32 +22,32 @@
             height: 100vh;
             background-color: white;
             font-family: 'GGX88 Book', sans-serif;
-            position: relative; /* Required for positioning the footer */
+            position: relative;
         }
 
         img {
             max-width: 60%;
-            margin-bottom: 40px; /* Space between PNG and glyph links */
-            cursor: pointer; /* Indicates interactivity */
+            margin-bottom: 40px;
+            cursor: pointer;
         }
 
         .glyph-links {
             display: flex;
-            justify-content: space-between; /* Space out links evenly */
+            justify-content: space-between;
             align-items: center;
-            width: 50%; /* Adjust width as needed for layout */
-            max-width: 200px; /* Optional: limit max width */
+            width: 50%;
+            max-width: 200px;
         }
 
         .nerd-link {
             font-family: 'SymbolsNerdFont', sans-serif;
-            font-size: 48px; /* Adjust size as needed */
-            color: black; /* Adjust color */
+            font-size: 48px;
+            color: black;
             text-decoration: none;
         }
 
         .nerd-link:hover {
-            color: gray; /* Optional hover effect */
+            color: gray;
         }
 
         .footer-text {
@@ -59,16 +59,28 @@
             color: black;
             text-align: center;
             white-space: nowrap;
-            display: none; /* Hidden by default */
+            display: none;
         }
+
+    .click-text {
+    position: absolute;
+    top: calc(50% + 50px); /* Adjusted to move it further down */
+    font-size: 7px;
+    color: black;
+    display: none;
+    pointer-events: none; /* Ensure it's not interactive */
+}
+
     </style>
 </head>
 <body>
     <img src="files/img/index.png" id="hoverImage">
 
+    <div class="click-text" id="clickText">click these</div>
+
     <div class="glyph-links">
-        <a href="audio.html" class="nerd-link">&#xF2a2;</a> <!-- Eye Icon -->
-        <a href="films.html" class="nerd-link">&#xF441;</a> <!-- Film Icon -->
+        <a href="audio.html" class="nerd-link">&#xF2a2;</a>
+        <a href="films.html" class="nerd-link">&#xF441;</a>
     </div>
 
     <div id="footerText" class="footer-text">
@@ -78,13 +90,16 @@
     <script>
         const hoverImage = document.getElementById('hoverImage');
         const footerText = document.getElementById('footerText');
+        const clickText = document.getElementById('clickText');
 
         hoverImage.addEventListener('mouseenter', () => {
             footerText.style.display = 'block';
+            clickText.style.display = 'block';
         });
 
         hoverImage.addEventListener('mouseleave', () => {
             footerText.style.display = 'none';
+            clickText.style.display = 'none';
         });
     </script>
 </body>
