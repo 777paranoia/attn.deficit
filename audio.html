@@ -1,132 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>audio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>audio</title>
 
-    <style>
-
-
-    .back-to-index {
-        position: absolute;
-        top: 10px;
-        left: 10px; /* Changed to the upper-left corner */
-        font-family: 'SymbolsNerdFont', sans-serif;
-        font-size: 12px; /* Adjust size if needed */
-        text-decoration: none;
-        color: black; /* Default color */
-    }
-
-    .back-to-index:hover {
-        color: gray; /* Optional hover effect */
-    }
-
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: white;
-            font-family: 'GGX88 Book', sans-serif; 
-        }
-
-.help-icon {
+<style>
+.back-to-index {
     position: absolute;
-    top: 30px; /* Position below the back button */
+    top: 10px;
     left: 10px;
     font-family: 'SymbolsNerdFont', sans-serif;
-    font-size: 12px; /* Same size as the back button */
+    font-size: 12px;
+    text-decoration: none;
+    color: black;
+}
+.back-to-index:hover {
+    color: gray;
+}
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: white;
+    font-family: 'GGX88 Book', sans-serif;
+}
+.help-icon {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    font-family: 'SymbolsNerdFont', sans-serif;
+    font-size: 12px;
     cursor: pointer;
     color: black;
     text-decoration: none;
-    user-select: none; /* Prevent text selection */
+    user-select: none;
 }
-
 .help-icon:hover {
-    color: gray; /* Optional hover effect */
+    color: gray;
 }
-
 .custom-tooltip {
     position: absolute;
     pointer-events: none;
     z-index: 1000;
-    color: black; /* Black text for the tooltip */
+    color: black;
     font-size: 12px;
     white-space: nowrap;
     padding: 5px 10px;
     display: none;
 }
-
-
-        #container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 40px;
-            width: 80%;
-            height: 90%;
-            margin-top: 100px;
-            box-sizing: border-box;
-        }
-
-        #dropdown {
-            width: 30%;
-            text-align: right;
-        }
-
-        #dropdown button {
-            padding: 8px 16px;
-            font-size: 1vh;
-            cursor: pointer;
-            background: none;
-            color: black;
-            margin-bottom: 8px;
-            border: none;
-        }
-
-        #dropdown button:hover {
-            background: white;
-        }  
-        #playlist {
-            display: none;
-            width: 100%; /* Adjusts dynamically to fit the container */
-           
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    box-sizing: border-box;
+    gap: 40px;
+    padding: 20px;
 }
-        #playlist button {
-            width: 100%;
-            height: 90%;
-
-            padding: 6px;
-            margin: 4px 0;
-            background: none;
-            border: none;
-            color: black;
-            text-align: right;
-            cursor: pointer;
-            font-size: 1vh;
-        }
-
-        #audioPlayer {
-            display: none;
-        }
-
-        #visualizerBox {
-            width: 30%;
-            height: 80%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #canvas {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+#dropdown {
+    width: 250px;
+    text-align: right;
+    flex-shrink: 0;
+}
+#dropdown button {
+    padding: 8px 16px;
+    font-size: 1vh;
+    cursor: pointer;
+    background: none;
+    color: black;
+    margin-bottom: 8px;
+    border: none;
+}
+#dropdown button:hover {
+    background: white;
+}
+#playlist {
+    display: none;
+    width: 100%;
+}
+#playlist button {
+    width: 100%;
+    height: 90%;
+    padding: 6px;
+    margin: 4px 0;
+    background: none;
+    border: none;
+    color: black;
+    text-align: right;
+    cursor: pointer;
+    font-size: 1vh;
+}
+#audioPlayer {
+    display: none;
+}
+#visualizerBox {
+    flex-grow: 1;
+    max-width: 1000px;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#canvas {
+    width: 100%;
+    height: 100%;
+}
+</style>
 </head>
+
 <body>
 <a href="index.html" class="back-to-index"><</a>
 <div id="help-icon" class="help-icon">?</div>
@@ -138,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const helpTooltip = document.getElementById('help-tooltip');
 
     helpIcon.addEventListener('mouseenter', () => {
-        helpTooltip.innerHTML = "open folder/click text for audio"; 
+        helpTooltip.innerHTML = "open folder/click text for audio";
         helpTooltip.style.display = 'block';
     });
 
@@ -146,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const cursorX = event.clientX;
         const cursorY = event.clientY;
         const padding = 10;
-
         helpTooltip.style.left = `${cursorX + padding}px`;
         helpTooltip.style.top = `${cursorY + padding}px`;
     });
@@ -156,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-
 
 <div id="container">
     <div id="dropdown">
@@ -181,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <button data-src="files/aud/misc_unreleased_full_003.mp3">misc_unreleased_full_003 // 2024 // non-commercial // 3:45</button>
             <button data-src="files/aud/misc_unreleased_full_004.mp3">misc_unreleased_full_004 // 2024 // non-commercial // 2:15</button>
             <button data-src="files/aud/misc_unreleased_full_005.mp3">misc_unreleased_full_005 // 2024 // non-commercial // 3:10</button>
-
             <audio id="audioPlayer" controls></audio>
         </div>
     </div>
@@ -244,11 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
     togglePlaylistButton.addEventListener('click', () => {
         playlist.style.display = 'block';
         togglePlaylistButton.textContent = '';
-
         if (!audioContext) {
             initVisualizer();
         }
-
         togglePlaylistButton.onclick = () => {
             const isHidden = playlist.style.display === 'none';
             playlist.style.display = isHidden ? 'block' : 'none';
@@ -267,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Pause audio when clicking outside of buttons
     document.addEventListener('click', (event) => {
         const isButton = event.target.closest('button');
         if (!isButton) {
@@ -276,6 +256,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-
 </body>
 </html>
