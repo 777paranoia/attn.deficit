@@ -221,39 +221,41 @@
         // Hover functionality for custom cursor
         const col = index % gridColumns;
 
-        video.addEventListener('mouseenter', () => {
-            customCursor.innerHTML = videoDetails[video.id];
-            customCursor.style.display = 'block';
-            video.muted = false;
-            video.play().catch(() => {});
-        });
+     video.addEventListener('mouseenter', () => {
+    customCursor.innerHTML = videoDetails[video.id];
+    customCursor.style.display = 'block';
+    video.muted = false;
+    video.play().catch(() => {});
+});
 
-        video.addEventListener('mousemove', (event) => {
-            if (!isDragging) {
-                const cursorX = event.clientX;
-                const cursorY = event.clientY;
-                const padding = 10;
+video.addEventListener('mousemove', (event) => {
+    if (!isDragging) {
+        const cursorX = event.clientX;
+        const cursorY = event.clientY;
+        const padding = 10;
 
-                if (col === 0) { // Leftmost column
-                    customCursor.style.textAlign = "right";
-                    customCursor.style.left = `${cursorX - customCursor.offsetWidth - padding}px`;
-                    customCursor.style.top = `${cursorY + padding}px`;
-                } else if (col === 1) { // Middle column
-                    customCursor.style.textAlign = "center";
-                    customCursor.style.left = `${cursorX - customCursor.offsetWidth / 2}px`;
-                    customCursor.style.top = `${cursorY + padding}px`;
-                } else { // Rightmost column
-                    customCursor.style.textAlign = "left";
-                    customCursor.style.left = `${cursorX + padding}px`;
-                    customCursor.style.top = `${cursorY + padding}px`;
-                }
-            }
-        });
+        customCursor.style.top = `${cursorY - customCursor.offsetHeight / 2}px`;
 
-        video.addEventListener('mouseleave', () => {
-            customCursor.style.display = 'none';
-            video.muted = true;
-        });
+        if (col === 0) {
+            // Left column: right-aligned text, appears to the right
+            customCursor.style.textAlign = 'right';
+            customCursor.style.left = `${cursorX + padding}px`;
+        } else if (col === 1) {
+            // Middle column: centered text, centered position
+            customCursor.style.textAlign = 'center';
+            customCursor.style.left = `${cursorX - customCursor.offsetWidth / 2}px`;
+        } else {
+            // Right column: left-aligned text, appears to the left
+            customCursor.style.textAlign = 'left';
+            customCursor.style.left = `${cursorX - customCursor.offsetWidth - padding}px`;
+        }
+    }
+});
+
+video.addEventListener('mouseleave', () => {
+    customCursor.style.display = 'none';
+    video.muted = true;
+});
     });
 });
     </script>
