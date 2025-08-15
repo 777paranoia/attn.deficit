@@ -29,25 +29,25 @@
 
 .help-icon {
     position: absolute;
-    top: 30px; /* Position below the back button */
+    top: 30px; 
     left: 10px;
     font-family: 'SymbolsNerdFont', sans-serif;
-    font-size: 12px; /* Same size as the back button */
+    font-size: 12px; 
     cursor: pointer;
     color: black;
     text-decoration: none;
-    user-select: none; /* Prevent text selection */
+    user-select: none; 
 }
 
 .help-icon:hover {
-    color: gray; /* Optional hover color */
+    color: gray; 
 }
 
 #help-tooltip {
     position: absolute;
     pointer-events: none;
     z-index: 1000;
-    color: black; /* Black text for the tooltip */
+    color: black; 
     font-size: 12px;
     white-space: nowrap;
     padding: 5px;
@@ -96,7 +96,7 @@
         const helpTooltip = document.getElementById('help-tooltip');
 
         helpIcon.addEventListener('mouseenter', () => {
-            helpTooltip.innerHTML = "click + drag videos/hover for audio + info"; // Replace with your actual text
+            helpTooltip.innerHTML = "click + drag videos/hover for audio + info"; 
             helpTooltip.style.display = 'block';
         });
 
@@ -184,10 +184,10 @@
         });
     }
 
-    // Initial grid setup
+    
     updateGrid();
 
-    // Update grid on window resize
+    
     window.addEventListener('resize', updateGrid);
 
     const videoDetails = {
@@ -230,7 +230,7 @@
             }
         });
 
-        // Hover functionality for custom cursor
+        
         const col = index % gridColumns;
 
      video.addEventListener('mouseenter', () => {
@@ -249,15 +249,15 @@ video.addEventListener('mousemove', (event) => {
         customCursor.style.top = `${cursorY - customCursor.offsetHeight / 2}px`;
 
         if (col === 0) {
-            // Left column: right-aligned text, appears to the right
+            
             customCursor.style.textAlign = 'right';
             customCursor.style.left = `${cursorX + padding}px`;
         } else if (col === 1) {
-            // Middle column: centered text, centered position
+            
             customCursor.style.textAlign = 'center';
             customCursor.style.left = `${cursorX - customCursor.offsetWidth / 2}px`;
         } else {
-            // Right column: left-aligned text, appears to the left
+            
             customCursor.style.textAlign = 'left';
             customCursor.style.left = `${cursorX - customCursor.offsetWidth - padding}px`;
         }
