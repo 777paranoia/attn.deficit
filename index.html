@@ -80,64 +80,43 @@
     777paranoia@gmail.com &nbsp;&nbsp;&nbsp; @djspeedsick &nbsp;&nbsp;&nbsp; chicago, il
   </div>
 <script>
-    const hoverImage = document.getElementById('hoverImage');
-    const footerText = document.getElementById('footerText');
-    const glyphLinks = document.querySelectorAll('.nerd-link');
+const hoverImage = document.getElementById('hoverImage');
+const footerText = document.getElementById('footerText');
 
-    const gifs = [
-        'files/gif/1.gif',
-        'files/gif/2.gif',
-        'files/gif/3.gif'
-        // add all your gif paths here
-    ];
+const gifs = [
+  'files/gif/1.gif',
+  'files/gif/2.gif',
+  'files/gif/3.gif'
+];
 
-    let bgInterval;
-    let currentGifIndex = -1;
+let currentGif = null;
 
-    function changeBackground() {
-        let nextIndex;
-        do {
-            nextIndex = Math.floor(Math.random() * gifs.length);
-        } while (nextIndex === currentGifIndex);
-        currentGifIndex = nextIndex;
-        document.body.style.backgroundImage = `url('${gifs[currentGifIndex]}')`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-    }
+function showGif() {
+  if (!currentGif) {
+    currentGif = gifs[Math.floor(Math.random() * gifs.length)];
+  }
+  document.body.style.backgroundImage = `url('${currentGif}')`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.backgroundPosition = 'center';
+  footerText.style.display = 'block';
+}
 
-    function startGifLoop() {
-        changeBackground();
-        bgInterval = setInterval(changeBackground, 1500);
-    }
+function hideGif() {
+  footerText.style.display = 'none';
+  document.body.style.backgroundImage = '';
+  currentGif = null;
+}
 
-    function stopGifLoop() {
-        clearInterval(bgInterval);
-        document.body.style.backgroundImage = '';
-    }
+// Hover on main image
+hoverImage.addEventListener('mouseenter', showGif);
+hoverImage.addEventListener('mouseleave', hideGif);
 
-    function showFooter() {
-        footerText.style.display = 'block';
-    }
-
-    function hideFooter() {
-        footerText.style.display = 'none';
-    }
-
-    // Events for the image
-    hoverImage.addEventListener('mouseenter', () => {
-        showFooter();
-        startGifLoop();
-    });
-    hoverImage.addEventListener('mouseleave', () => {
-        hideFooter();
-        stopGifLoop();
-    });
-
-    // Events for each glyph
-    glyphLinks.forEach(link => {
-        link.addEventListener('mouseenter', startGifLoop);
-        link.addEventListener('mouseleave', stopGifLoop);
-    });
+// Hover on glyphs
+document.querySelectorAll('.nerd-link').forEach(link => {
+  link.addEventListener('mouseenter', showGif);
+  link.addEventListener('mouseleave', hideGif);
+});
 </script>
 </body>
 </html>

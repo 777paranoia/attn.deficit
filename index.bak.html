@@ -53,15 +53,15 @@
       line-height: 1;
     }
 
-    .nerd-link:hover { color: gray; }
+    .nerd-link:hover { color: white; }
 
     .footer-text {
       position: absolute;
-      bottom: 10px;
+      bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 12px;
-      color: black;
+      color: white;
       text-align: center;
       white-space: nowrap;
       display: none; /* Hidden by default */
@@ -79,76 +79,65 @@
   <div id="footerText" class="footer-text">
     777paranoia@gmail.com &nbsp;&nbsp;&nbsp; @djspeedsick &nbsp;&nbsp;&nbsp; chicago, il
   </div>
-
-  <script>
+<script>
     const hoverImage = document.getElementById('hoverImage');
     const footerText = document.getElementById('footerText');
+    const glyphLinks = document.querySelectorAll('.nerd-link');
 
-    const showFooter = () => { footerText.style.display = 'block'; };
-    const hideFooter = () => { footerText.style.display = 'none'; };
+    const gifs = [
+        'files/gif/1.gif',
+        'files/gif/2.gif',
+        'files/gif/3.gif'
+        // add all your gif paths here
+    ];
 
-    hoverImage.addEventListener('mouseenter', showFooter);
-    hoverImage.addEventListener('mouseleave', hideFooter);
+    let bgInterval;
+    let currentGifIndex = -1;
 
-    // --- Background GIF rotation ---
-    // Fallback list (kept; manifest still used if available)
-    let gifs = ["files/gif/1.gif","files/gif/2.gif","files/gif/3.gif","files/gif/4.gif","files/gif/5.gif","files/gif/6.gif","files/gif/7.gif","files/gif/8.gif","files/gif/9.gif","files/gif/10.gif","files/gif/11.gif"];
-    let order = [];
-    let idx = 0;
-
-    const cache = new Map();
-    function preload(src){ if(!src || cache.has(src)) return; const i=new Image(); i.src=src; cache.set(src,i); }
-
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
-      return arr;
+    function changeBackground() {
+        let nextIndex;
+        do {
+            nextIndex = Math.floor(Math.random() * gifs.length);
+        } while (nextIndex === currentGifIndex);
+        currentGifIndex = nextIndex;
+        document.body.style.backgroundImage = `url('${gifs[currentGifIndex]}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
     }
 
-    async function loadManifest(){
-      try{
-        const res = await fetch('files/gif/manifest.json', {cache:'no-store'});
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const list = await res.json();
-        if(Array.isArray(list) && list.length) gifs = list;
-      }catch(e){
-        console.warn('Using fallback GIF list:', e);
-      }finally{
-        order = shuffle([...Array(gifs.length).keys()]);
-        idx = 0;
-        preload(gifs[order[0]]);
-        if(gifs.length>1) preload(gifs[order[1]]);
-      }
+    function startGifLoop() {
+        changeBackground();
+        bgInterval = setInterval(changeBackground, 1500);
     }
 
-    function nextGifUrl(){
-      if(!gifs.length) return null;
-      const url = gifs[order[idx]];
-      idx = (idx+1) % order.length;
-      preload(gifs[order[idx]]);
-      return url;
+    function stopGifLoop() {
+        clearInterval(bgInterval);
+        document.body.style.backgroundImage = '';
     }
 
-    function applyBg(url){ if(url) document.body.style.backgroundImage = `url('${url}')`; }
-    function clearBg(){ document.body.style.backgroundImage = ''; }
+    function showFooter() {
+        footerText.style.display = 'block';
+    }
 
+    function hideFooter() {
+        footerText.style.display = 'none';
+    }
+
+    // Events for the image
     hoverImage.addEventListener('mouseenter', () => {
-      const url = nextGifUrl();
-      if(url) applyBg(url);
+        showFooter();
+        startGifLoop();
     });
-
     hoverImage.addEventListener('mouseleave', () => {
-      clearBg(); // remove GIF; next hover will use next shuffled one
+        hideFooter();
+        stopGifLoop();
     });
 
-    // Touch toggle
-    let showing = false;
-    hoverImage.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if(!showing){ const url = nextGifUrl(); if(url) applyBg(url); showFooter(); showing = true; }
-      else { clearBg(); hideFooter(); showing = false; }
-    }, {passive:false});
-
-    loadManifest();
-  </script>
+    // Events for each glyph
+    glyphLinks.forEach(link => {
+        link.addEventListener('mouseenter', startGifLoop);
+        link.addEventListener('mouseleave', stopGifLoop);
+    });
+</script>
 </body>
 </html>
