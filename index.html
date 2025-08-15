@@ -1,91 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>attn://deficit</title>
-    <style>
-        @font-face {
-            font-family: 'SymbolsNerdFont';
-            src: url('files/font/SymbolsNerdFont-Regular.woff2') format('woff2'),
-                 url('files/font/SymbolsNerdFont-Regular.woff') format('woff');
-            font-display: swap;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>attn://deficit</title>
+  <style>
+    @font-face {
+      font-family: 'SymbolsNerdFont';
+      src: url('files/font/SymbolsNerdFont-Regular.woff2') format('woff2'),
+           url('files/font/SymbolsNerdFont-Regular.woff') format('woff');
+      font-display: swap;
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: white;
-            font-family: 'GGX88 Book', sans-serif;
-            position: relative; /* Required for positioning the footer */
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: white;
+      font-family: 'GGX88 Book', sans-serif;
+      position: relative; /* Required for positioning the footer */
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;   /* fill screen */
+      background-attachment: fixed; /* optional: parallax-ish */
+    } /* ← only ONE closing brace here */
 
-        img {
-            max-width: 60%;
-            margin-bottom: 40px; /* Space between PNG and glyph links */
-            cursor: pointer; /* Indicates interactivity */
-        }
+    img {
+      max-width: 60%;
+      margin-bottom: 40px; /* Space between PNG and glyph links */
+      cursor: pointer;     /* Indicates interactivity */
+      display: block;
+    }
 
-        .glyph-links {
-            display: flex;
-            justify-content: space-between; /* Space out links evenly */
-            align-items: center;
-            width: 50%; /* Adjust width as needed for layout */
-            max-width: 200px; /* Optional: limit max width */
-        }
+    .glyph-links {
+      display: flex;
+      justify-content: space-between; /* Space out links evenly */
+      align-items: center;
+      width: 50%;        /* Adjust width as needed for layout */
+      max-width: 200px;  /* Optional: limit max width */
+      margin-top: 40px;  /* push them lower */
+    } /* ← only ONE closing brace here */
 
-        .nerd-link {
-            font-family: 'SymbolsNerdFont', sans-serif;
-            font-size: 48px; /* Adjust size as needed */
-            color: black; /* Adjust color */
-            text-decoration: none;
-        }
+    .nerd-link {
+      font-family: 'SymbolsNerdFont', sans-serif;
+      font-size: 48px; /* Adjust size as needed */
+      color: black;    /* Adjust color */
+      text-decoration: none;
+      line-height: 1;
+    }
 
-        .nerd-link:hover {
-            color: gray; /* Optional hover effect */
-        }
+    .nerd-link:hover { color: gray; }
 
-        .footer-text {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            color: black;
-            text-align: center;
-            white-space: nowrap;
-            display: none; /* Hidden by default */
-        }
-    </style>
+    .footer-text {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: black;
+      text-align: center;
+      white-space: nowrap;
+      display: none; /* Hidden by default */
+    }
+  </style>
 </head>
 <body>
-    <img src="files/img/index.png" id="hoverImage">
+  <img src="files/img/index.png" id="hoverImage" alt="attn://deficit">
 
-    <div class="glyph-links">
-        <a href="audio.html" class="nerd-link">&#xF2a2;</a> <!-- Eye Icon -->
-        <a href="films.html" class="nerd-link">&#xF441;</a> <!-- Film Icon -->
-    </div>
+  <div class="glyph-links">
+    <a href="audio.html" class="nerd-link" aria-label="Audio" title="Audio">&#xF2a2;</a>
+    <a href="films.html" class="nerd-link" aria-label="Films" title="Films">&#xF441;</a>
+  </div>
 
-    <div id="footerText" class="footer-text">
-        777paranoia@gmail.com &nbsp;&nbsp;&nbsp; @djspeedsick &nbsp;&nbsp;&nbsp; chicago, il
-    </div>
+  <div id="footerText" class="footer-text">
+    777paranoia@gmail.com &nbsp;&nbsp;&nbsp; @djspeedsick &nbsp;&nbsp;&nbsp; chicago, il
+  </div>
 
-    <script>
-        const hoverImage = document.getElementById('hoverImage');
-        const footerText = document.getElementById('footerText');
+  <script>
+    const hoverImage = document.getElementById('hoverImage');
+    const footerText = document.getElementById('footerText');
 
-        hoverImage.addEventListener('mouseenter', () => {
-            footerText.style.display = 'block';
-        });
+    const showFooter = () => { footerText.style.display = 'block'; };
+    const hideFooter = () => { footerText.style.display = 'none'; };
 
-        hoverImage.addEventListener('mouseleave', () => {
-            footerText.style.display = 'none';
-        });
-    </script>
+    hoverImage.addEventListener('mouseenter', showFooter);
+    hoverImage.addEventListener('mouseleave', hideFooter);
+
+    // --- Background GIF rotation ---
+    // Fallback list (kept; manifest still used if available)
+    let gifs = ["files/gif/1.gif","files/gif/2.gif","files/gif/3.gif","files/gif/4.gif","files/gif/5.gif","files/gif/6.gif","files/gif/7.gif","files/gif/8.gif","files/gif/9.gif","files/gif/10.gif","files/gif/11.gif"];
+    let order = [];
+    let idx = 0;
+
+    const cache = new Map();
+    function preload(src){ if(!src || cache.has(src)) return; const i=new Image(); i.src=src; cache.set(src,i); }
+
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+      return arr;
+    }
+
+    async function loadManifest(){
+      try{
+        const res = await fetch('files/gif/manifest.json', {cache:'no-store'});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const list = await res.json();
+        if(Array.isArray(list) && list.length) gifs = list;
+      }catch(e){
+        console.warn('Using fallback GIF list:', e);
+      }finally{
+        order = shuffle([...Array(gifs.length).keys()]);
+        idx = 0;
+        preload(gifs[order[0]]);
+        if(gifs.length>1) preload(gifs[order[1]]);
+      }
+    }
+
+    function nextGifUrl(){
+      if(!gifs.length) return null;
+      const url = gifs[order[idx]];
+      idx = (idx+1) % order.length;
+      preload(gifs[order[idx]]);
+      return url;
+    }
+
+    function applyBg(url){ if(url) document.body.style.backgroundImage = `url('${url}')`; }
+    function clearBg(){ document.body.style.backgroundImage = ''; }
+
+    hoverImage.addEventListener('mouseenter', () => {
+      const url = nextGifUrl();
+      if(url) applyBg(url);
+    });
+
+    hoverImage.addEventListener('mouseleave', () => {
+      clearBg(); // remove GIF; next hover will use next shuffled one
+    });
+
+    // Touch toggle
+    let showing = false;
+    hoverImage.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if(!showing){ const url = nextGifUrl(); if(url) applyBg(url); showFooter(); showing = true; }
+      else { clearBg(); hideFooter(); showing = false; }
+    }, {passive:false});
+
+    loadManifest();
+  </script>
 </body>
 </html>
