@@ -1,0 +1,124 @@
+/Users/studio/attn.deficit
+├── audio.html
+├── backup.zip
+├── butterchurn.js
+├── butterchurnPresets.min.js
+├── CNAME
+├── file.tree.log
+├── files
+│   ├── aud
+│   │   ├── ACNE_COATEDDENIM_CUT4.m4a
+│   │   ├── ACNE_DARKSIDE_CUT5V2.m4a
+│   │   ├── ACNE_SHERLING_CUT2.m4a
+│   │   ├── ACNE_SHERLING_CUT3.m4a
+│   │   ├── ACNE_TEASER_CUT1.m4a
+│   │   ├── GABBER_CLIP.m4a
+│   │   ├── MARGIELA_V1.0.m4a
+│   │   ├── MARGIELA_V2.0.m4a
+│   │   ├── NIKE-1x.m4a
+│   │   ├── NIKE-2.m4a
+│   │   ├── NIKE-3.m4a
+│   │   ├── old
+│   │   │   ├── a_cut_001.mp3
+│   │   │   ├── a_cut_002.mp3
+│   │   │   ├── a_cut_003.mp3
+│   │   │   ├── a_cut_004.mp3
+│   │   │   ├── cl_sample_001.mp3
+│   │   │   ├── m-audio-001.mp3
+│   │   │   ├── m-audio-002.mp3
+│   │   │   ├── m-audio-003.mp3
+│   │   │   ├── m-audio-004.mp3
+│   │   │   ├── m-audio-005.mp3
+│   │   │   ├── m-audio-006.mp3
+│   │   │   ├── misc_unreleased_full_001.mp3
+│   │   │   ├── misc_unreleased_full_002.mp3
+│   │   │   ├── misc_unreleased_full_003.mp3
+│   │   │   ├── misc_unreleased_full_004.mp3
+│   │   │   ├── misc_unreleased_full_005.mp3
+│   │   │   ├── r&r_001.mp3
+│   │   │   ├── r&r_002.mp3
+│   │   │   └── r&r_003.mp3
+│   │   ├── OP3-v1.m4a
+│   │   ├── OP3-v2dubbed.m4a
+│   │   ├── POP_PUNK_CLIP.m4a
+│   │   └── TRAP_FRAGMENT.m4a
+│   ├── font
+│   │   ├── GGX88Bk-Italic.woff
+│   │   ├── GGX88Bk-Italic.woff2
+│   │   ├── GGX88Bk-Regular.woff
+│   │   ├── GGX88Bk-Regular.woff2
+│   │   ├── GGX88El-Italic.woff
+│   │   ├── GGX88El-Italic.woff2
+│   │   ├── GGX88El-Regular.woff
+│   │   ├── GGX88El-Regular.woff2
+│   │   ├── GGX88Hv-Italic.woff
+│   │   ├── GGX88Hv-Italic.woff2
+│   │   ├── GGX88Hv-Regular.woff
+│   │   ├── GGX88Hv-Regular.woff2
+│   │   ├── GGX88Lt-Italic.woff
+│   │   ├── GGX88Lt-Italic.woff2
+│   │   ├── GGX88Lt-Regular.woff
+│   │   ├── GGX88Lt-Regular.woff2
+│   │   ├── GGX88Rg-Bold.woff
+│   │   ├── GGX88Rg-Bold.woff2
+│   │   ├── GGX88Rg-BoldItalic.woff
+│   │   ├── GGX88Rg-BoldItalic.woff2
+│   │   ├── GGX88Rg-Italic.woff
+│   │   ├── GGX88Rg-Italic.woff2
+│   │   ├── GGX88Rg-Regular.woff
+│   │   ├── GGX88Rg-Regular.woff2
+│   │   ├── GGX88Ul-Italic.woff
+│   │   ├── GGX88Ul-Italic.woff2
+│   │   ├── GGX88Ul-Regular.woff
+│   │   ├── GGX88Ul-Regular.woff2
+│   │   ├── SymbolsNerdFont-Regular.woff
+│   │   ├── SymbolsNerdFont-Regular.woff2
+│   │   ├── SymbolsNerdFontMono-Regular.woff
+│   │   └── SymbolsNerdFontMono-Regular.woff2
+│   ├── gif
+│   │   ├── 1.gif
+│   │   ├── 10.gif
+│   │   ├── 11.gif
+│   │   ├── 2.gif
+│   │   ├── 3.gif
+│   │   ├── 4.gif
+│   │   ├── 5.gif
+│   │   ├── 7.gif
+│   │   ├── 8.gif
+│   │   ├── 9.gif
+│   │   └── manifest.json
+│   ├── img
+│   │   └── index.png
+│   └── mov
+│       ├── acne1.mp4
+│       ├── acne2.mp4
+│       ├── acne3.mp4
+│       ├── acne4.mp4
+│       ├── camper1.mp4
+│       ├── camper2.mp4
+│       ├── camper3.mp4
+│       ├── chemlove.mp4
+│       ├── forcedenlightenment.mp4
+│       ├── grate.mp4
+│       ├── indexmov.gif
+│       ├── lotusmotel.mp4
+│       ├── marg1.mp4
+│       ├── marg2.mp4
+│       ├── mmxgm.mp4
+│       ├── nthng.mp4
+│       ├── RESCALED
+│       │   ├── chemlove.mp4
+│       │   └── forcedenlightenment.mp4
+│       ├── smtiaie.mp4
+│       ├── tricky.mp4
+│       ├── untitled.mp4
+│       └── yfpmms.mp4
+├── films.html
+├── index.html
+├── jquery-3.1.1.min.js
+├── lib
+│   └── butterchurn.js
+├── lodash.js
+└── muzak.html
+
+10 directories, 112 files

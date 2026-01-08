@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>films</title>
+
+    <style>
+        @font-face {
+            font-family: 'SymbolsNerdFont';
+            src: url('files/font/SymbolsNerdFont-Regular.woff2') format('woff2'),
+                 url('files/font/SymbolsNerdFont-Regular.woff') format('woff');
+            font-display: swap;
+        }
+
+        .back-to-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-family: 'SymbolsNerdFont', sans-serif;
+            font-size: 12px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .back-to-index:hover {
+            color: gray;
+        }
+
+.help-icon {
+    position: absolute;
+    top: 30px; 
+    left: 10px;
+    font-family: 'SymbolsNerdFont', sans-serif;
+    font-size: 12px; 
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+    user-select: none; 
+}
+
+.help-icon:hover {
+    color: gray; 
+}
+
+#help-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    color: black; 
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 5px;
+    display: none;
+}
+
+        body {
+            font-family: 'GGX88 Book', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            background-color: white;
+            position: relative;
+        }
+
+        video {
+            position: absolute;
+            object-fit: cover;
+            cursor: grab;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .dragging {
+            cursor: grabbing;
+        }
+
+        .custom-cursor {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1000;
+            color: white;
+            font-size: 13px;
+            white-space: nowrap;
+            padding: 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const helpIcon = document.getElementById('help-icon');
+        const helpTooltip = document.getElementById('help-tooltip');
+
+        helpIcon.addEventListener('mouseenter', () => {
+            helpTooltip.innerHTML = "click + drag videos/hover for audio + info"; 
+            helpTooltip.style.display = 'block';
+        });
+
+        helpIcon.addEventListener('mousemove', (event) => {
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+            const padding = 10;
+
+            helpTooltip.style.left = `${cursorX + padding}px`;
+            helpTooltip.style.top = `${cursorY + padding}px`;
+        });
+
+        helpIcon.addEventListener('mouseleave', () => {
+            helpTooltip.style.display = 'none';
+        });
+    });
+</script>
+
+   <a href="index.html" class="back-to-index"><</a>
+<div id="help-icon" class="help-icon">?</div>
+<div id="help-tooltip" class="custom-cursor"></div>
+
+
+    <video id="video13" autoplay muted loop playsinline playsinline>
+        <source src="files/mov/gstar1.mp4" type="video/mp4">
+    </video>
+    <video id="video14" autoplay muted loop playsinline playsinline>
+         <source src="files/mov/gstar2.mp4" type="video/mp4">
+    </video>
+    <video id="video15" autoplay muted loop playsinline playsinline>
+        <source src="files/mov/gstar3.mp4" type="video/mp4">
+    </video>
+    <video id="video16" autoplay muted loop playsinline playsinline>
+        <source src="files/mov/gstar4.mp4" type="video/mp4">
+    </video>
+    <video id="video10" autoplay muted loop playsinline>
+        <source src="files/mov/nthng.mp4" type="video/mp4">
+    </video>
+     <video id="video11" autoplay muted loop playsinline>
+        <source src="files/mov/tricky.mp4" type="video/mp4">
+    </video>
+    <video id="video12" autoplay muted loop playsinline>
+       <source src="files/mov/mmxgm.mp4" type="video/mp4">
+    </video>
+    <video id="video1" autoplay muted loop playsinline>
+        <source src="files/mov/acne1.mp4" type="video/mp4">
+    </video>
+    <video id="video2" autoplay muted loop playsinline>
+        <source src="files/mov/acne2.mp4" type="video/mp4">
+    </video>
+    <video id="video3" autoplay muted loop playsinline>
+        <source src="files/mov/acne3.mp4" type="video/mp4">
+    </video>
+    <video id="video4" autoplay muted loop playsinline>
+        <source src="files/mov/acne4.mp4" type="video/mp4">
+    </video>
+    <video id="video5" autoplay muted loop playsinline>
+        <source src="files/mov/camper1.mp4" type="video/mp4">
+    </video>
+    <video id="video6" autoplay muted loop playsinline>
+        <source src="files/mov/camper2.mp4" type="video/mp4">
+    </video>
+    <video id="video7" autoplay muted loop playsinline>
+        <source src="files/mov/camper3.mp4" type="video/mp4">
+    </video>
+    <video id="video8" autoplay muted loop playsinline>
+        <source src="files/mov/marg1.mp4" type="video/mp4">
+    </video>
+    <video id="video9" autoplay muted loop playsinline>
+        <source src="files/mov/marg2.mp4" type="video/mp4">
+    </video>
+
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const videos = document.querySelectorAll('video');
+    const customCursor = document.getElementById('custom-cursor');
+   const columnPattern = [4, 2, 4, 2, 4];
+
+function updateGrid() {
+    const videoSize = Math.min(window.innerWidth, window.innerHeight) / 7;
+    const gap = videoSize * 0.1;
+
+    const totalCols = columnPattern.length;
+    const gridWidth =
+        totalCols * videoSize + (totalCols - 1) * gap;
+
+    const startX = (window.innerWidth - gridWidth) / 2;
+
+    let index = 0;
+
+    columnPattern.forEach((rowsInCol, colIndex) => {
+        const colX = startX + colIndex * (videoSize + gap);
+
+        const colHeight =
+            rowsInCol * videoSize + (rowsInCol - 1) * gap;
+
+        const startY = (window.innerHeight - colHeight) / 2;
+
+        for (let row = 0; row < rowsInCol && index < videos.length; row++) {
+            const video = videos[index];
+
+            video.style.width = `${videoSize}px`;
+            video.style.height = `${videoSize}px`;
+            video.style.left = `${colX}px`;
+            video.style.top = `${startY + row * (videoSize + gap)}px`;
+
+            // store cursor column logic
+            video.dataset.vcol =
+                colIndex === 0 ? 0 :
+                colIndex === totalCols - 1 ? 2 : 1;
+
+            index++;
+        }
+    });
+}
+
+    
+    updateGrid();
+
+    
+    window.addEventListener('resize', updateGrid);
+
+    const videoDetails = {
+        video10: "Nothing<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
+        video11: "Acne Studios X Kappa<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
+        video12: "Maison Margiela x Gentle Monsters<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
+        video1: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video2: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video3: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video4: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video5: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video6: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video7: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
+        video8: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
+        video9: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025"
+    };
+
+    videos.forEach((video, index) => {
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        video.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            offsetX = event.clientX - video.getBoundingClientRect().left;
+            offsetY = event.clientY - video.getBoundingClientRect().top;
+            video.classList.add('dragging');
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (isDragging) {
+                video.style.left = `${event.clientX - offsetX}px`;
+                video.style.top = `${event.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                video.classList.remove('dragging');
+            }
+        });
+
+        
+
+     video.addEventListener('mouseenter', () => {
+    customCursor.innerHTML = videoDetails[video.id];
+    customCursor.style.display = 'block';
+    video.muted = false;
+    video.play().catch(() => {});
+});
+
+video.addEventListener('mousemove', (event) => {
+    if (!isDragging) {
+        const cursorX = event.clientX;
+        const cursorY = event.clientY;
+        const padding = 10;
+
+        customCursor.style.top = `${cursorY - customCursor.offsetHeight / 2}px`;
+
+        if (col === 0) {
+            
+            customCursor.style.textAlign = 'right';
+            customCursor.style.left = `${cursorX + padding}px`;
+        } else if (col === 1) {
+            
+            customCursor.style.textAlign = 'center';
+            customCursor.style.left = `${cursorX - customCursor.offsetWidth / 2}px`;
+        } else {
+            
+            customCursor.style.textAlign = 'left';
+            customCursor.style.left = `${cursorX - customCursor.offsetWidth - padding}px`;
+        }
+    }
+});
+
+video.addEventListener('mouseleave', () => {
+    customCursor.style.display = 'none';
+    video.muted = true;
+});
+    });
+});
+    </script>
+</body>
+</html>
