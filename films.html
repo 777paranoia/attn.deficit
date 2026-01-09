@@ -21,6 +21,7 @@
             font-size: 12px;
             text-decoration: none;
             color: black;
+            z-index: 10;
         }
 
         .back-to-index:hover { color: gray; }
@@ -34,20 +35,10 @@
             cursor: pointer;
             color: black;
             user-select: none;
+            z-index: 10;
         }
 
         .help-icon:hover { color: gray; }
-
-        #help-tooltip {
-            position: absolute;
-            pointer-events: none;
-            z-index: 1000;
-            color: black;
-            font-size: 12px;
-            white-space: nowrap;
-            padding: 5px;
-            display: none;
-        }
 
         body {
             font-family: 'GGX88 Book', sans-serif;
@@ -67,7 +58,7 @@
             transition: all 0.2s ease-in-out;
         }
 
-        .dragging { cursor: grabbing; }
+        .dragging { cursor: grabbing; z-index: 100; }
 
         .custom-cursor {
             position: absolute;
@@ -78,37 +69,15 @@
             white-space: nowrap;
             padding: 0;
             display: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
     </style>
 </head>
 <body>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const helpIcon = document.getElementById('help-icon');
-    const helpTooltip = document.getElementById('help-tooltip');
-
-    helpIcon.addEventListener('mouseenter', () => {
-        helpTooltip.innerHTML = "click + drag videos/hover for audio + info";
-        helpTooltip.style.display = 'block';
-    });
-
-    helpIcon.addEventListener('mousemove', e => {
-        helpTooltip.style.left = `${e.clientX + 10}px`;
-        helpTooltip.style.top = `${e.clientY + 10}px`;
-    });
-
-    helpIcon.addEventListener('mouseleave', () => {
-        helpTooltip.style.display = 'none';
-    });
-});
-</script>
-
 <a href="index.html" class="back-to-index"><</a>
 <div id="help-icon" class="help-icon">?</div>
 <div id="help-tooltip" class="custom-cursor"></div>
-
-<!-- videos (UNCHANGED except duplicate attribute removed) -->
 
 <video id="video10" autoplay muted loop playsinline><source src="files/mov/nthng.mp4"></video>
 <video id="video11" autoplay muted loop playsinline><source src="files/mov/tricky.mp4"></video>
@@ -120,61 +89,101 @@ document.addEventListener('DOMContentLoaded', () => {
 <video id="video3" autoplay muted loop playsinline><source src="files/mov/acne3.mp4"></video>
 <video id="video4" autoplay muted loop playsinline><source src="files/mov/acne4.mp4"></video>
 <video id="video5" autoplay muted loop playsinline><source src="files/mov/camper1.mp4"></video>
-=<video id="video15" autoplay muted loop playsinline><source src="files/mov/gstar3.mp4"></video>
+<video id="video15" autoplay muted loop playsinline><source src="files/mov/gstar3.mp4"></video>
 <video id="video16" autoplay muted loop playsinline><source src="files/mov/gstar4.mp4"></video>
 <video id="video6" autoplay muted loop playsinline><source src="files/mov/camper2.mp4"></video>
 <video id="video7" autoplay muted loop playsinline><source src="files/mov/camper3.mp4"></video>
 <video id="video8" autoplay muted loop playsinline><source src="files/mov/marg1.mp4"></video>
 <video id="video9" autoplay muted loop playsinline><source src="files/mov/marg2.mp4"></video>
 
+<video id="videoR1" autoplay muted loop playsinline><source src="files/mov/compreel1.mp4"></video>
+<video id="videoR2" autoplay muted loop playsinline><source src="files/mov/compreel2.mp4"></video>
+
 <div id="custom-cursor" class="custom-cursor"></div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-
     const videos = document.querySelectorAll('video');
     const customCursor = document.getElementById('custom-cursor');
+    const helpIcon = document.getElementById('help-icon');
+    const helpTooltip = document.getElementById('help-tooltip');
+
     const columnPattern = [4, 2, 4, 2, 4];
     const gstarIds = new Set(['video13','video14','video15','video16']);
+    const reelIds = new Set(['videoR1','videoR2']);
+
+    // Help Icon UI Logic
+    helpIcon.addEventListener('mouseenter', () => {
+        helpTooltip.innerHTML = "click + drag videos/hover for audio + info";
+        helpTooltip.style.display = 'block';
+    });
+    helpIcon.addEventListener('mousemove', e => {
+        helpTooltip.style.left = `${e.clientX + 10}px`;
+        helpTooltip.style.top = `${e.clientY + 10}px`;
+    });
+    helpIcon.addEventListener('mouseleave', () => { helpTooltip.style.display = 'none'; });
 
     function updateGrid() {
-        const videoSize = Math.min(window.innerWidth, window.innerHeight) / 7;
-        const gap = videoSize * 0.1;
+        const videoSize = Math.min(window.innerWidth, window.innerHeight) / 8.2;
+        const gap = videoSize * 0.08;
 
         const totalCols = columnPattern.length;
         const gridWidth = totalCols * videoSize + (totalCols - 1) * gap;
         const startX = (window.innerWidth - gridWidth) / 2;
 
         let index = 0;
+        const gridVideos = Array.from(videos).filter(v => !reelIds.has(v.id));
 
+        // 1. Position Main Grid
         columnPattern.forEach((rowsInCol, colIndex) => {
             const colX = startX + colIndex * (videoSize + gap);
-
+            
             let colHeight = 0;
-            for (let i = 0; i < rowsInCol && index + i < videos.length; i++) {
-                const v = videos[index + i];
-                colHeight += gstarIds.has(v.id) ? videoSize * 2 : videoSize;
-                if (i) colHeight += gap;
+            for (let i = 0; i < rowsInCol && index + i < gridVideos.length; i++) {
+                const v = gridVideos[index + i];
+                // G-Star videos span 2 rows + the gap between them
+                colHeight += gstarIds.has(v.id) ? (videoSize * 2 + gap) : videoSize;
+                if (i < rowsInCol - 1) colHeight += gap;
             }
 
-            let y = (window.innerHeight - colHeight) / 2;
+            // Anchors everything higher up (38%)
+            let y = (window.innerHeight * 0.38) - (colHeight / 2); 
 
-            for (let row = 0; row < rowsInCol && index < videos.length; row++) {
-                const video = videos[index];
+            for (let row = 0; row < rowsInCol && index < gridVideos.length; row++) {
+                const video = gridVideos[index];
                 const isGstar = gstarIds.has(video.id);
+                const h = isGstar ? (videoSize * 2 + gap) : videoSize;
 
                 video.style.width = `${videoSize}px`;
-                video.style.height = `${isGstar ? videoSize * 2 : videoSize}px`;
+                video.style.height = `${h}px`;
                 video.style.left = `${colX}px`;
                 video.style.top = `${y}px`;
 
-                video.dataset.vcol =
-                    colIndex === 0 ? 0 :
-                    colIndex === totalCols - 1 ? 2 : 1;
-
-                y += (isGstar ? videoSize * 2 : videoSize) + gap;
+                video.dataset.vcol = colIndex === 0 ? 0 : (colIndex === totalCols - 1 ? 2 : 1);
+                
+                y += h + gap;
                 index++;
             }
+        });
+
+        // 2. Position Reels snuggly below the grid
+        const reelVideos = Array.from(videos).filter(v => reelIds.has(v.id));
+        const reelWidth = (gridWidth / 2) - (gap / 2);
+        
+        let gridBottom = 0;
+        gridVideos.forEach(v => {
+            const b = parseFloat(v.style.top) + parseFloat(v.style.height);
+            if (b > gridBottom) gridBottom = b;
+        });
+
+        const reelY = gridBottom + gap; 
+
+        reelVideos.forEach((v, i) => {
+            v.style.width = `${reelWidth}px`;
+            v.style.height = `${reelWidth * 0.5625}px`; 
+            v.style.left = `${startX + (i * (reelWidth + gap))}px`;
+            v.style.top = `${reelY}px`;
+            v.dataset.vcol = 1;
         });
     }
 
@@ -182,22 +191,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateGrid);
 
     const videoDetails = {
-        video13: "G-Star Raw<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video14: "G-Star Raw<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video15: "G-Star Raw<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video16: "G-Star Raw<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video10: "Nothing<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video11: "Acne Studios X Kappa<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video12: "Maison Margiela x Gentle Monsters<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video1: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video2: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video3: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video4: "Acne Studios<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video5: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video6: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video7: "Camperlab<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2024",
-        video8: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025",
-        video9: "Maison Margiela<br>Directed by Jordan Hemingway<br>Post-Production: Purple Martin Studio<br>2025"
+        video13: "G-Star Raw<br>Directed by Jordan Hemingway<br>2025",
+        video14: "G-Star Raw<br>Directed by Jordan Hemingway<br>2025",
+        video15: "G-Star Raw<br>Directed by Jordan Hemingway<br>2025",
+        video16: "G-Star Raw<br>Directed by Jordan Hemingway<br>2025",
+        video10: "Nothing<br>Directed by Jordan Hemingway<br>2025",
+        video11: "Acne Studios X Kappa<br>Directed by Jordan Hemingway<br>2025",
+        video12: "Maison Margiela x Gentle Monsters<br>Directed by Jordan Hemingway<br>2025",
+        video1: "Acne Studios<br>Directed by Jordan Hemingway<br>2024",
+        video2: "Acne Studios<br>Directed by Jordan Hemingway<br>2024",
+        video3: "Acne Studios<br>Directed by Jordan Hemingway<br>2024",
+        video4: "Acne Studios<br>Directed by Jordan Hemingway<br>2024",
+        video5: "Camperlab<br>Directed by Jordan Hemingway<br>2024",
+        video6: "Camperlab<br>Directed by Jordan Hemingway<br>2024",
+        video7: "Camperlab<br>Directed by Jordan Hemingway<br>2024",
+        video8: "Maison Margiela<br>Directed by Jordan Hemingway<br>2025",
+        video9: "Maison Margiela<br>Directed by Jordan Hemingway<br>2025",
+        videoR1: "Compliance (Original Score)<br>Directed by Kyle Mangione-Smith<br>2026",
+        videoR2: "Compliance (Original Score)<br>Directed by Kyle Mangione-Smith<br>2026"
     };
 
     videos.forEach(video => {
@@ -222,26 +233,37 @@ document.addEventListener('DOMContentLoaded', () => {
             video.classList.remove('dragging');
         });
 
-        video.addEventListener('mouseenter', () => {
-            customCursor.innerHTML = videoDetails[video.id];
+video.addEventListener('mouseenter', () => {
+            customCursor.innerHTML = videoDetails[video.id] || "";
             customCursor.style.display = 'block';
+            
+            // UNMUTE AND ENSURE PLAYBACK
             video.muted = false;
+            
+            // Browsers often pause video when unmuted via script; this forces it to keep playing
+            const promise = video.play();
+            if (promise !== undefined) {
+                promise.catch(error => {
+                    // Auto-play was prevented
+                    console.log("Playback prevented: " + error);
+                });
+            }
         });
 
         video.addEventListener('mousemove', e => {
             if (isDragging) return;
             const col = Number(video.dataset.vcol);
-            customCursor.style.top = `${e.clientY - customCursor.offsetHeight / 2}px`;
+            customCursor.style.top = `${e.clientY - (customCursor.offsetHeight / 2)}px`;
 
             if (col === 0) {
-                customCursor.style.textAlign = 'right';
-                customCursor.style.left = `${e.clientX + 10}px`;
+                customCursor.style.textAlign = 'left';
+                customCursor.style.left = `${e.clientX + 15}px`;
             } else if (col === 1) {
                 customCursor.style.textAlign = 'center';
-                customCursor.style.left = `${e.clientX - customCursor.offsetWidth / 2}px`;
+                customCursor.style.left = `${e.clientX - (customCursor.offsetWidth / 2)}px`;
             } else {
-                customCursor.style.textAlign = 'left';
-                customCursor.style.left = `${e.clientX - customCursor.offsetWidth - 10}px`;
+                customCursor.style.textAlign = 'right';
+                customCursor.style.left = `${e.clientX - customCursor.offsetWidth - 15}px`;
             }
         });
 
